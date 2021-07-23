@@ -34,7 +34,7 @@ class Scraper:
             self.site = sites["theguardian"]
 
     def __enter__(self):
-        self.nlp = spacy.load('en_core_web_md', disable=['parser', 'tagger'])
+        self.nlp = spacy.load('en_core_web_md', disable=['parser', 'tagger', 'lemmatizer'])
         self.geolocator = Nominatim(user_agent="wapapp")
 
     def __exit__(self, exception_type, exception_value, traceback):
