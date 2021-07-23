@@ -2,7 +2,7 @@
 
 A Web-App showing places mentioned in the news on a map.
 
-Scraping news sites (currently only derStandard.at) with **python** and **selenium**
+Scraping news sites (currently only derStandard.at) with **python** and **rssparser**
 
 Geoparsing with external services using **geopy**
 
@@ -17,10 +17,10 @@ Displaying results with **Flask / Leaflet.js**
 sudo apt update && sudo apt upgrade -y
 sudo apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools python3-venv unzip
 ```
-### Chromium + Webdriver
+<!-- ### Chromium + Webdriver
 ```
 sudo apt install chromium-browser chromium-chromedriver
-```
+``` -->
 ### Project Files
 ```
 wget https://github.com/ryepenchi/newslocator/archive/master.zip
@@ -55,9 +55,9 @@ crontab -e
 ```
 and add
 ```
-20 * * * * /home/[YOUR_USER_NAME]/newslocator/bin/python newslocator/src/scraper.py -a
+20 * * * * /home/[YOUR_USER_NAME]/newslocator/bin/python newslocator/src/rss_scraper_en.py -a
 ```
 ### Start Flask Server
-Followed the instructions at
+Follow the instructions at
 
 https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uwsgi-and-nginx-on-ubuntu-20-04
