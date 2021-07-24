@@ -169,6 +169,7 @@ function createMarkers(data) {
             let link = document.createElement("a");
 			try {
 				link.href = data.articles[id]["link"];
+				link.target = "_blank";
 				link.innerHTML = "> " + data.articles[id]["title"];
 			} catch (TypeError) {
 				console.log(id, " for ", arr.word, " not in data?");
