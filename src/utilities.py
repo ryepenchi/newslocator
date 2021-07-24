@@ -27,4 +27,5 @@ parser.add_argument("-c", "--category", type=str)
 args = parser.parse_args()
 
 sites = {
-    "theguardian": "https://www.theguardian.com/world/rss"}
+    "theguardian": "https://www.theguardian.com/world/rss",
+    "cnn": "http://rss.cnn.com/rss/edition_world.rss"}
