@@ -9,6 +9,6 @@ lib/
 lib64/
 share/
 pyvenv.cfg
-wherethenews.ini
+newslocator.ini
 wsgi.py
 src/static/img/favicon.ico~
