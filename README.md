@@ -10,17 +10,14 @@ Managing data with an SQLite database using **flask_sqlalchemy**
 
 Displaying results with **Flask / Leaflet.js**
 
-**Try it:** [ryepenchi.gihub.io/newslocator](https://ryepenchi.github.io/newslocator) (Hopefully a live version)
+**Try it:** [https://newslocator.ryepenchi.xyz/](https://newslocator.ryepenchi.xyz/) (Hopefully a live version)
 
 ### Ubuntu 20.04 Server Setup
 ```
 sudo apt update && sudo apt upgrade -y
 sudo apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools python3-venv unzip
 ```
-<!-- ### Chromium + Webdriver
-```
-sudo apt install chromium-browser chromium-chromedriver
-``` -->
+
 ### Project Files
 ```
 wget https://github.com/ryepenchi/newslocator/archive/master.zip
