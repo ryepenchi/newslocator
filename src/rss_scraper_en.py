@@ -9,6 +9,8 @@ import re
 from datetime import datetime
 from dateutil import parser as dp
 import feedparser
+from ratelimit import limits
+from ratelimit.decorators import sleep_and_retry
 
 import spacy
 from geopy.geocoders import Nominatim
@@ -43,7 +45,14 @@ class Scraper:
     def get_feeds(self):
         self.feed = feedparser.parse(self.site)
 
+    @sleep_and_retry
+    @limits(calls=1, period=60)
+    def geocode(self, entity):
+        return self.geolocator.geocode(entity)
+
     def scrape_entry(self, entry):
+
+
         if any([cat in entry.id for cat in ["/live/", "/video/", "/gallery/"]]):
             return
         # ID
@@ -64,7 +73,10 @@ class Scraper:
         # PUB DATE
         pub_date = dp.parse(entry.published)
         # CATEGORIES
-        cats = ", ".join([t.term for t in entry.tags])
+        try:
+            cats = ", ".join([t.term for t in entry.tags])
+        except AttributeError:
+            cats = ""
         # BODY
         body = entry.summary
         tags = re.compile(r'<[^>]+>')
@@ -84,14 +96,16 @@ class Scraper:
         uids = []
         for ent in ents:
             # Get rid of single letter ents and date ents
-            if len(ent) < 3:
+            if len(ent) < 2:
                 continue
             try:
                 if type(dp.parse(ent)) == datetime:
                     continue
             except Exception:
                 pass
-            r = self.geolocator.geocode(ent)
+            # r = self.geolocator.geocode(ent)
+            # Use Rate Limited Method
+            r = self.geocode(ent)
             # Conditions whether new place was found, is new or relevat
             if r:
                 c1 = r.raw["place_id"] not in uids
@@ -122,17 +136,19 @@ class Scraper:
         l = db.session.query(Place.id).all()
         existing_ids = [item for sublist in l for item in sublist]
 
-        for place in br:
-            if place["place_id"] not in existing_ids:
+        for p in br:
+            if p["place_id"] not in existing_ids:
                 # make entry in places
                 place = Place(
-                    id = place["place_id"],
-                    word = place["word"],
-                    place_name = place["address"],
-                    lat = place["geo"].latitude,
-                    lon = place["geo"].longitude
+                    id = p["place_id"],
+                    word = p["word"],
+                    place_name = p["address"],
+                    lat = p["geo"].latitude,
+                    lon = p["geo"].longitude
                 )
-                article.places.append(place)
+            else:
+                place = Place.query.filter_by(id = p["place_id"]).first()
+            article.places.append(place)       
         db.session.add(article)
         db.session.commit()
         self.cnt += 1
