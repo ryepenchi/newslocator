@@ -67,4 +67,4 @@ if __name__ == '__main__':
         if sys.argv[1] == 'mkdb':
             db.create_all()
     else:
-        app.run(host="0.0.0.0", debug=True)
+        app.run(host="0.0.0.0", debug=False)
