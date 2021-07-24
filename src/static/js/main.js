@@ -2,7 +2,7 @@
 // Leaflet Construction
 var map = L.map('map', {
     attributionControl: false
-}).setView([48.517587, 8.648699], 5);
+}).setView([31.635, 40.891], 3);
 
 // Mapbox
 function mapbox_access_token() {
@@ -27,7 +27,7 @@ async function create_Tile_layer() {
 	var t = await mapbox_access_token();
 	mapbox_tile_layer(t);
 }
-// create_Tile_layer();
+create_Tile_layer();
 
 // Custom Marker Icon
 var custom_icon = L.Icon.extend({
@@ -73,7 +73,7 @@ var time_filter = L.control.custom({
 	}
 }).addTo(map);
 
-// Article List
+// Article List Control
 var article_list = L.control.custom({
 	position: 'topright',
 	content: '<i class="material-icons">view_list</i>',
@@ -88,45 +88,6 @@ var article_list = L.control.custom({
 		click: openArticleMenu
 	}
 }).addTo(map);
-
-// var article_list = L.control({position: 'bottomright'});
-// article_list.onAdd = function (map) {
-//     this._div = L.DomUtil.create('div', 'ctl article-list');
-//     this._div.innerHTML = '<span class="slide"><a href="#" onClick="openRightMenu()"><i class="far fa-newspaper"></i></a></span>';
-//     // this.update();
-//     return this._div;
-// }
-// article_list.addTo(map);
-
-
-// Title Control Element
-// var title = L.control({position: 'topright'});
-// title.onAdd = function (map) {
-//     this._div = L.DomUtil.create('div', 'ctl title');
-//     this._div.innerHTML = '<h1 class="map-title">Newslocator</h1>';
-//     // this.update();
-//     return this._div;
-// }
-// title.addTo(map);
-
-// var dates = L.control({position: 'topleft'});
-// dates.onAdd = function (map) {
-//     this._div = L.DomUtil.create('div', 'ctl dates');
-//     this._div.innerHTML = '<h4 id="dates"></h4>';
-//     // this.update();
-//     return this._div;
-// }
-// dates.addTo(map);
-
-// Time Filter Control Button
-// var filter = L.control({position: 'bottomright'});
-// filter.onAdd = function (map) {
-//     this._div = L.DomUtil.create('div', 'ctl filter');
-//     this._div.innerHTML = '<span class="slide"><a href="#" onClick="openSlideMenu()"><i class="fas fa-filter"></i></a></span>';
-//     // this.update();
-//     return this._div;
-// }
-// filter.addTo(map);
 
 // Attribution
 L.control.attribution({
@@ -146,169 +107,139 @@ var repo = L.control.custom({
 	}
 }).addTo(map);
 
-// var repo = L.control({position: 'bottomleft'});
-// repo.onAdd = function (map) {
-//     this._div = L.DomUtil.create('div', 'ctl repo-link');
-//     this._div.innerHTML = '<span class="slide"><a href="https://github.com/ryepenchi/newslocator" target="_blank"><i class="fab fa-github"></i></a></span>';
-//     // this.update();
-//     return this._div;
-// }
-// repo.addTo(map);
-
 // Control Logic
-function renderData() {
-	if (from_date.toLocaleDateString() == to_date.toLocaleDateString()) {
-		document.getElementById("dates").innerHTML = from_date.toLocaleDateString() + "<br><br><br>";
-	} else {
-		document.getElementById("dates").innerHTML = "<div>" + from_date.toLocaleDateString() + "<br> - <br>" + to_date.toLocaleDateString() + "</div>";
-	}
-	var request = new XMLHttpRequest();
-	var fromrq = "from_date=" + from_date.toLocaleString();
-	var torq = "to_date=" + to_date.toLocaleString();
-	request.open('GET', '/points?' + fromrq + "&" + torq, true);
 
-	request.onload = function() {
-		if (this.status >= 200 && this.status < 400) {
-			// Success
-			// Create MapMarkers
-			var data = JSON.parse(this.response);
-			var markers = data.points.map(function(arr) {
-				const t = document.createElement("b");
-				t.innerHTML = arr.word + "<br>";
-				const a = document.createElement("a");
-				a.innerHTML = "Article"
-				a.onclick = () => {
-					var myChildren = [];
-					console.log(arr.aids);
-					for (const id of arr.aids) {
-						myChildren.push(document.getElementById(id));
-					}
-					var myNode = document.getElementById("card-collection");
-					while (myNode.firstChild) {
-						if (!arr.aids.includes(myNode.firstChild.id)) {
-							myNode.removeChild(myNode.firstChild);
-						}
-					}
-					for (const c of myChildren) {
-						myNode.append(c)
-					}
-					closeFilterMenu();
-					openRightMenu();
-				};
-				a.style = "cursor: pointer;"
-				t.append(a);
-				// const links = arr.links.map(function (l) {
-				// 	const a = document.createElement("a");
-				// 	a.href = l;
-				// 	a.className = "truncate";
-				// 	a.innerText = l;
-				// 	a.target = "_blank";
-				// 	const b = document.createElement("br");
-				// 	a.append(b);
-				// 	t.append(a);
-				// });
-				return L.marker([arr.lat, arr.lon], {icon: newsicon}).bindPopup(t);
-			});
-			map.removeLayer(layer);
-			layer = L.layerGroup(markers);
-			map.addLayer(layer);
-			// Create Cards
-			var myNode = document.getElementById("card-collection");
-			while (myNode.firstChild) {
-				myNode.removeChild(myNode.firstChild);
-			}
-			data.articles.map(function (arr) {
-				const span = document.createElement("span");
-				span.className = "card-title";
-				span.innerText = arr.title;
-				const para = document.createElement("span");
-				para.className = "card-places truncate";
-				para.innerHTML = arr.words;
-				const cardcontent = document.createElement("div");
-				cardcontent.className = "card-content card-body white-text";
-				cardcontent.appendChild(span);
-				cardcontent.appendChild(para);
-				const diva = document.createElement("div");
-				// diva.className = "card-action";
-				// const l = document.createElement("a");
-				// l.href = arr.link;
-				// l.innerText = "Article"
-				// l.target = "_blank";
-				// diva.appendChild(l);
-				
-				const cardheader = document.createElement("div");
-				cardheader.className = "card-content card-header orange-text text-lighten-1";
-				const carddate = document.createElement("span");
-				carddate.innerText = arr.pubdate;
-				cardheader.appendChild(carddate);
-				const l = document.createElement("a");
-				l.href = arr.link;
-				l.innerHTML = '<span><i class="material-icons">open_in_new</i></span>';
-				l.target = "_blank";
-				cardheader.appendChild(l);
-				const card = document.createElement("div");
-				card.id = arr.id;
-				card.onclick = () => renderArticlePlaces(arr.points);
-				card.style = "cursor: pointer;"
-				card.className = "card blue-grey lighten-1 collection-item";
-				card.appendChild(cardheader);
-				card.appendChild(cardcontent);
-				card.appendChild(diva);
-				const cardlink = document.createElement("a");
-				document.getElementById("card-collection").appendChild(card);
-			});
-		} else {
-			//Reached target Server, but it returned an error
-			console.log("Mimimi")
-		}
-	};
-
-	request.onerror = function() {
-		//There was a connection error of some sort
-	};
-
-	request.send();
-}
-
-function renderArticlePlaces(arr) {
-	var markers = arr.map(function(arr) {
-		const ptext = document.createElement("b");
-		ptext.innerHTML = arr.word;
-		return L.marker([arr.lat, arr.lon]).bindPopup(ptext);
-	});
-	map.removeLayer(layer);
-	layer = L.layerGroup(markers);
-	map.addLayer(layer);
-}
-
+// Initial Date Setting and Today Button
 function setToToday() {
-	today = new Date();
-	from_date = new Date(today.getFullYear(), today.getMonth(), today.getDate(),0,0);
-	to_date = new Date(today.getFullYear(), today.getMonth(), today.getDate(),23,59);
+	var today = new Date();
+	dates["from"] = new Date(today.getFullYear(), today.getMonth(), today.getDate(),0,0);
+	dates["to"] = new Date(today.getFullYear(), today.getMonth(), today.getDate(),23,59);
+    // filter menu text
+	if (dates.from.toLocaleDateString() == dates.to.toLocaleDateString()) {
+		document.getElementById("dates").innerHTML = dates.from.toLocaleDateString() + "<br><br><br>";
+	} else {
+		document.getElementById("dates").innerHTML = "<div>" + dates.from.toLocaleDateString() + "<br> - <br>" + dates.to.toLocaleDateString() + "</div>";
+	}
+
 }
-
-// Initial data loading
-var today, from_date, to_date;
-setToToday();
-var layer = L.layerGroup();
-window.onload = () => renderData();
-
 
 // Date Buttons
 function modDates(f1,t1,f2,t2) {
-	if (from_date.toLocaleDateString() == to_date.toLocaleDateString()) {
-		from_date.setDate(from_date.getDate()+f1);
-		to_date.setDate(to_date.getDate()+t1);
+    // global dates variable
+	if (dates.from.toLocaleDateString() == dates.to.toLocaleDateString()) {
+		dates.from.setDate(dates.from.getDate()+f1);
+		dates.to.setDate(dates.to.getDate()+t1);
 	} else {
-		from_date.setDate(from_date.getDate()+f2);
-		to_date.setDate(to_date.getDate()+t2);
+		dates.from.setDate(dates.from.getDate()+f2);
+		dates.to.setDate(dates.to.getDate()+t2);
 	}
-	renderData();
+    // filter menu text
+	if (dates.from.toLocaleDateString() == dates.to.toLocaleDateString()) {
+		document.getElementById("dates").innerHTML = dates.from.toLocaleDateString() + "<br><br><br>";
+	} else {
+		document.getElementById("dates").innerHTML = "<div>" + dates.from.toLocaleDateString() + "<br> - <br>" + dates.to.toLocaleDateString() + "</div>";
+	}
+    // Markers and Cards
+	LoadAndCreate();
 }
+
+
+function loadData(dates) {
+    console.log("Loading articles");
+    var fromrq = "from_date=" + dates.from.toLocaleString();
+    var torq = "to_date=" + dates.to.toLocaleString();
+    return fetch("/points?" + fromrq + "&" + torq)
+        .then(response => {
+            if (response.headers.get('content-type') != "application/json") {
+                throw new TypeError();
+            }
+            var j = response.json();
+            return j;
+        })
+}
+
+function createMarkers(data) {
+    var markers = data.points.map(arr => {
+        const popUpText = document.createElement("div");
+        const popUpTitle = document.createElement("h6");
+        popUpTitle.innerHTML = arr.word;
+        const articleList = document.createElement("ul");
+        for (let id of arr.aids) {
+            let article = document.createElement("li");
+            let link = document.createElement("a");
+			try {
+				link.href = data.articles[id]["link"];
+				link.innerHTML = "> " + data.articles[id]["title"];
+			} catch (TypeError) {
+				console.log(id, " for ", arr.word, " not in data?");
+			} finally {
+				article.appendChild(link);
+				articleList.appendChild(article)	
+			}
+        }
+        popUpText.appendChild(popUpTitle);
+        popUpText.appendChild(articleList);
+        return L.marker([arr.lat, arr.lon], {icon: newsicon}).bindPopup(popUpText);
+    })
+    map.removeLayer(markerLayer);
+    markerLayer = L.layerGroup(markers);
+    map.addLayer(markerLayer);
+}
+
+function createCards(data) {
+    var myNode = document.getElementById("card-collection");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+    Object.keys(data.articles).map(function (arr) {
+		arr = data.articles[arr];
+        const span = document.createElement("span");
+        span.className = "card-title";
+        span.innerText = arr.title;
+        const para = document.createElement("span");
+        para.className = "card-places truncate";
+        para.innerHTML = arr.words;
+        const cardcontent = document.createElement("div");
+        cardcontent.className = "card-content card-body white-text";
+        cardcontent.appendChild(span);
+        cardcontent.appendChild(para);
+        const diva = document.createElement("div");
+        const cardheader = document.createElement("div");
+        cardheader.className = "card-content card-header orange-text text-lighten-1";
+        const carddate = document.createElement("span");
+        carddate.innerText = arr.pubdate;
+        cardheader.appendChild(carddate);
+        const l = document.createElement("a");
+        l.href = arr.link;
+        l.innerHTML = '<span><i class="material-icons">open_in_new</i></span>';
+        l.target = "_blank";
+        cardheader.appendChild(l);
+        const card = document.createElement("div");
+        card.id = arr.id;
+        card.className = "card blue-grey lighten-1 collection-item";
+        card.appendChild(cardheader);
+        card.appendChild(cardcontent);
+        card.appendChild(diva);
+        document.getElementById("card-collection").appendChild(card);
+    });
+}
+
+async function LoadAndCreate() {
+    var data = await loadData(dates);
+    createMarkers(data);
+    createCards(data);
+}
+
+// Setup
+var data;
+var markerLayer = L.layerGroup();
+var dates = {};
+setToToday();
+window.onload = () => LoadAndCreate(dates);
 
 document.getElementById("today").onclick = () => {
 	setToToday();
-	renderData();
+    LoadAndCreate(dates);
 };
 document.getElementById("m1d").onclick = () => modDates(-1, -1, -1, -8);
 document.getElementById("p1d").onclick = () => modDates(1, 1, 8, 1);
@@ -343,18 +274,3 @@ function closeArticleMenu () {
 	document.getElementById('articlemenu').classList.add("collapsed");
 	document.getElementById('articlemenu').classList.remove("expanded");
 }
-
-// function closeMenu(menu) {
-// 	document.getElementById(menu).classList.add("collapsed");
-// 	document.getElementById(menu).classList.remove("expanded");
-// }
-// function openMenu (menu) {
-// 	document.getElementById(menu).classList.remove("collapsed");
-// 	document.getElementById(menu).classList.add("expanded");
-// }
-// var openFilterMenu = openMenu('filtermenu');
-// var closeFilterMenu = closeMenu('filtermenu');
-// var openInfoMenu = openMenu('infomenu');
-// var closeInfoMenu = closeMenu('infomenu');
-// var openArticleMenu = openMenu('articlemenu');
-// var closeArticleMenu = closeMenu('articlemenu');
