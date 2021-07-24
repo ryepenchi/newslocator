@@ -45,10 +45,10 @@ def points():
             "lat":point.lat, 
             "lon":point.lon,
             })
-    a = []
+    a = dict()
     for article in articles:
         words = ", ".join([p.word for p in article.places])
-        a.append({
+        a[article.id] = {
             "id": article.id,
             "title":article.title, 
             "words":words, 
@@ -59,7 +59,7 @@ def points():
                 "links":[{"link":a.link, "title":a.title} for a in point.articles], 
                 "lat":point.lat, 
                 "lon":point.lon} for point in article.places]
-            })
+            }
     return jsonify({"points": p, "articles": a})
 
 if __name__ == '__main__':
