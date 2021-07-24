@@ -46,7 +46,7 @@ class Scraper:
         self.feed = feedparser.parse(self.site)
 
     @sleep_and_retry
-    @limits(calls=1, period=60)
+    @limits(calls=1, period=1)
     def geocode(self, entity):
         return self.geolocator.geocode(entity)
 

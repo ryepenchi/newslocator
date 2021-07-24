@@ -22,6 +22,7 @@ preshed==3.0.5
 pydantic==1.8.2
 pyparsing==2.4.7
 python-dateutil==2.8.2
+ratelimit==2.2.1
 requests==2.26.0
 sgmllib3k==1.0.0
 six==1.16.0
