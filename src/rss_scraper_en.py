@@ -73,7 +73,7 @@ class Scraper:
         # PUB DATE
         try:
             pub_date = dp.parse(entry.published)
-        except KeyError:
+        except AttributeError:
             pub_date = scrape_date
         # CATEGORIES
         try:
