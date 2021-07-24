@@ -71,7 +71,10 @@ class Scraper:
         # SCRAPE DATE
         scrape_date = datetime.now()
         # PUB DATE
-        pub_date = dp.parse(entry.published)
+        try:
+            pub_date = dp.parse(entry.published)
+        except KeyError:
+            pub_date = scrape_date
         # CATEGORIES
         try:
             cats = ", ".join([t.term for t in entry.tags])
