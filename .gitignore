@@ -11,3 +11,4 @@ share/
 pyvenv.cfg
 wherethenews.ini
 wsgi.py
+*~
