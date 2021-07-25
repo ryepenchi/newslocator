@@ -1,8 +1,10 @@
 
 // Leaflet Construction
 var map = L.map('map', {
-    attributionControl: false
-}).setView([31.635, 40.891], 3);
+    attributionControl: false,
+	minZoom: 2,
+	maxZoom: 7,
+}).setView([0, 90], 2);
 
 // Mapbox
 function mapbox_access_token() {
