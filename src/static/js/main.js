@@ -53,7 +53,7 @@ var info = L.control.custom({
 		"color": 'rgba(100,100,100,1)'
 	},
 	events: {
-		click: openInfoMenu
+		click: () => openMenu('infomenu')
 	}
 }).addTo(map);
 
@@ -69,7 +69,7 @@ var time_filter = L.control.custom({
 		"color": 'rgba(100,100,100,1)',
 	},
 	events: {
-		click: openFilterMenu
+		click: () => openMenu('filtermenu')
 	}
 }).addTo(map);
 
@@ -85,7 +85,7 @@ var article_list = L.control.custom({
 		"color": 'rgba(100,100,100,1)',
 	},
 	events: {
-		click: openArticleMenu
+		click: () => openMenu('articlemenu')
 	}
 }).addTo(map);
 
@@ -259,30 +259,12 @@ document.getElementById("m1w").onclick = () => modDates(-7, 0, -7, -7);
 document.getElementById("p1w").onclick = () => modDates(0, 7, 7, 7);
 
 // Menu Functions
-function openFilterMenu () {
-	document.getElementById('filtermenu').classList.remove("collapsed");
-	document.getElementById('filtermenu').classList.add("expanded");
-  }
-  
-function closeFilterMenu () {
-	document.getElementById('filtermenu').classList.add("collapsed");
-	document.getElementById('filtermenu').classList.remove("expanded");
-}
-function openInfoMenu () {
-	document.getElementById('infomenu').classList.remove("collapsed");
-	document.getElementById('infomenu').classList.add("expanded");
+function openMenu (menu) {
+	document.getElementById(menu).classList.remove("collapsed");
+	document.getElementById(menu).classList.add("expanded");
 }
 
-function closeInfoMenu () {
-	document.getElementById('infomenu').classList.add("collapsed");
-	document.getElementById('infomenu').classList.remove("expanded");
-}
-function openArticleMenu () {
-	document.getElementById('articlemenu').classList.remove("collapsed");
-	document.getElementById('articlemenu').classList.add("expanded");
-}
-
-function closeArticleMenu () {
-	document.getElementById('articlemenu').classList.add("collapsed");
-	document.getElementById('articlemenu').classList.remove("expanded");
+function closeMenu (menu) {
+	document.getElementById(menu).classList.add("collapsed");
+	document.getElementById(menu).classList.remove("expanded");
 }
