@@ -86,7 +86,8 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-html, body {
+/* Leaflet Base */
+   html, body {
   height: 100%;
   padding: 0;
   margin: 0;
@@ -95,6 +96,27 @@ html, body {
   height: 100%;
   width: 100vw;
 }
+/* Markercluster Icons */
+.leaflet-div-icon {
+  background-color: transparent;
+  border-style: none;
+}
+.leaflet-div-icon img {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  left: -20px;
+  top: -40px;
+}
+.leaflet-div-icon p {
+  position: relative;
+  top: -83px;
+  left: -4px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+/* Navigation and Controls */
 .collapsed {
   width: 0 !important;
 }

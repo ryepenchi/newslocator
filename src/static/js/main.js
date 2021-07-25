@@ -183,7 +183,18 @@ function createMarkers(data) {
         return L.marker([arr.lat, arr.lon], {icon: newsicon}).bindPopup(popUpText);
     })
     map.removeLayer(markerLayer);
-    markerLayer = L.layerGroup(markers);
+    markerLayer = L.markerClusterGroup({
+		showCoverageOnHover: false,
+
+		iconCreateFunction: function(cluster) {
+			return L.divIcon({
+				html: "<img src='static/img/multiicon.svg' ><p>" + cluster.getChildCount() + "</p>",
+			});
+		}
+	});
+	for (let marker of markers) {
+		markerLayer.addLayer(marker);
+	}
     map.addLayer(markerLayer);
 }
 
@@ -233,7 +244,7 @@ async function LoadAndCreate() {
 
 // Setup
 var data;
-var markerLayer = L.layerGroup();
+var markerLayer = L.markerClusterGroup();
 var dates = {};
 setToToday();
 window.onload = () => LoadAndCreate(dates);

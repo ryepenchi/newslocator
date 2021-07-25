@@ -1,4 +1,4 @@
-config.json
+src/static/config.json
 config.py
 *.pyc
 *.db
