@@ -2,7 +2,7 @@
 
 A Web-App showing places mentioned in the news on a map.
 
-Scraping news sites (currently only derStandard.at) with **python** and **rssparser**
+Scraping news sites (currently only theGuardian.com) with **python** and **rssparser**
 
 Geoparsing with external services using **geopy**
 
