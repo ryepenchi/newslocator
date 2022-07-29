@@ -1,6 +1,12 @@
-# newslocator
+# Newslocator
 
 A Web-App showing places mentioned in the news on a map.
+
+**Try it:** [https://newslocator.ryepenchi.xyz/](https://newslocator.ryepenchi.xyz/) (Hopefully a live version)
+
+Seperate Repo evaluating the quality of the geoparsing process [https://github.com/ryepenchi/geoparsing-evalutation](ryepenchi/geoparsing-evaluation)
+
+---
 
 Scraping news sites (currently only theGuardian.com) with **python** and **rssparser**
 
@@ -9,8 +15,6 @@ Geoparsing with external services using **geopy**
 Managing data with an SQLite database using **flask_sqlalchemy**
 
 Displaying results with **Flask / Leaflet.js**
-
-**Try it:** [https://newslocator.ryepenchi.xyz/](https://newslocator.ryepenchi.xyz/) (Hopefully a live version)
 
 ### Ubuntu 20.04 Server Setup
 ```
