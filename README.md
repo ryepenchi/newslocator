@@ -4,7 +4,7 @@ A Web-App showing places mentioned in the news on a map.
 
 **Try it:** [https://newslocator.ryepenchi.xyz/](https://newslocator.ryepenchi.xyz/) (Hopefully a live version)
 
-Seperate Repo evaluating the quality of the geoparsing process [https://github.com/ryepenchi/geoparsing-evalutation](ryepenchi/geoparsing-evaluation)
+Seperate Repo evaluating the quality of the geoparsing process [geoparsing-evaluation](https://github.com/ryepenchi/geoparsing-evalutation)
 
 ---
 
